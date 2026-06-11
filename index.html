@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O Enigma</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family:'Poppins',sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    overflow:hidden;
+    background:linear-gradient(135deg,#050816,#111827,#312e81);
+    color:white;
+}
+
+#stars{
+    position:fixed;
+    inset:0;
+    overflow:hidden;
+}
+
+.star{
+    position:absolute;
+    width:2px;
+    height:2px;
+    background:white;
+    border-radius:50%;
+    animation:twinkle 4s infinite ease-in-out;
+}
+
+@keyframes twinkle{
+    0%,100%{opacity:.2;}
+    50%{opacity:1;}
+}
+
+.card{
+    width:90%;
+    max-width:650px;
+    padding:40px;
+    text-align:center;
+    border-radius:24px;
+    background:rgba(255,255,255,.08);
+    backdrop-filter:blur(16px);
+    border:1px solid rgba(255,255,255,.15);
+    box-shadow:0 15px 40px rgba(0,0,0,.4);
+    z-index:2;
+}
+
+.hidden{
+    display:none;
+}
+
+h1{
+    font-weight:500;
+    margin-bottom:20px;
+}
+
+p{
+    line-height:1.8;
+    margin-bottom:15px;
+}
+
+button{
+    margin-top:20px;
+    padding:14px 28px;
+    border:none;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:1rem;
+    font-weight:600;
+    transition:.3s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+}
+
+.primary{
+    background:white;
+    color:#312e81;
+}
+
+input{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    font-size:1rem;
+    margin-top:15px;
+    outline:none;
+}
+
+.message{
+    opacity:0;
+    animation:fadeIn 1s forwards;
+    margin-bottom:18px;
+}
+
+@keyframes fadeIn{
+    from{
+        opacity:0;
+        transform:translateY(12px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+
+.star-symbol{
+    font-size:3rem;
+    margin-bottom:15px;
+    animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+    0%,100%{
+        transform:scale(1);
+    }
+    50%{
+        transform:scale(1.15);
+    }
+}
+
+.actions{
+    margin-top:30px;
+}
+
+.spotify{
+    display:inline-block;
+    text-decoration:none;
+    color:white;
+    background:#1DB954;
+    padding:14px 22px;
+    border-radius:12px;
+    margin:8px;
+    font-weight:600;
+}
+
+.youtube{
+    display:inline-block;
+    text-decoration:none;
+    color:white;
+    background:#FF0000;
+    padding:14px 22px;
+    border-radius:12px;
+    margin:8px;
+    font-weight:600;
+}
+
+.footer{
+    margin-top:35px;
+    font-size:.8rem;
+    opacity:.35;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="stars"></div>
+
+<div class="card">
+
+    <div id="inicio">
+
+        <div class="star-symbol">✨</div>
+
+        <h1>
+            Algumas coisas só fazem sentido
+            quando encontramos a pessoa certa.
+        </h1>
+
+        <p>
+            Talvez esta seja uma delas.
+        </p>
+
+        <button class="primary" onclick="mostrarPergunta()">
+            Continuar
+        </button>
+
+    </div>
+
+    <div id="pergunta" class="hidden">
+
+        <h1>Existe apenas uma pergunta.</h1>
+
+        <input
+            type="text"
+            id="nome"
+            placeholder="Digite seu nome"
+        >
+
+        <button class="primary" onclick="validarNome()">
+            Prosseguir
+        </button>
+
+    </div>
+
+    <div id="resultado" class="hidden"></div>
+
+</div>
+
+<script>
+
+for(let i=0;i<120;i++){
+
+    let star=document.createElement("div");
+
+    star.classList.add("star");
+
+    star.style.left=Math.random()*100+"%";
+    star.style.top=Math.random()*100+"%";
+
+    star.style.animationDelay=
+        Math.random()5+"s";
+
+    document.getElementById("stars")
+        .appendChild(star);
+}
+
+function mostrarPergunta(){
+
+    document.getElementById("inicio")
+        .classList.add("hidden");
+
+    document.getElementById("pergunta")
+        .classList.remove("hidden");
+
+    setTimeout(()=>{
+        document.getElementById("nome").focus();
+    },200);
+}
+
+document.addEventListener("keydown",function(e){
+
+    if(
+        e.key==="Enter" &&
+        !document.getElementById("pergunta")
+        .classList.contains("hidden")
+    ){
+        validarNome();
+    }
+
+});
+
+function validarNome(){
+
+    const nome=document
+        .getElementById("nome")
+        .value
+        .trim()
+        .toLowerCase();
+
+    const nomesPermitidos=[
+        "carine",
+        "carine nile",
+        "cah",
+        "carine teste nile"
+    ];
+
+    document.getElementById("pergunta")
+        .classList.add("hidden");
+
+    const resultado=
+        document.getElementById("resultado");
+
+    resultado.classList.remove("hidden");
+
+    if(nomesPermitidos.includes(nome)){
+
+        resultado.innerHTML=
+        '<div class="star-symbol">✨</div>';
+
+        const mensagens=[
+            'Você encontrou exatamente o que procurava.',
+            'Há encontros que parecem coincidência.',
+            'Há músicas que parecem recados.',
+            'Algumas histórias começam sem aviso.',
+            'E algumas músicas encontram exatamente quem deveriam encontrar.',
+            '✨ Bem-vinda.'
+        ];
+
+        mensagens.forEach((texto,index)=>{
+
+            setTimeout(()=>{
+
+                let p=document.createElement("p");
+
+                p.className="message";
+
+                p.innerText=texto;
+
+                resultado.appendChild(p);
+
+            },1500(index+1));
+
+        });
+
+        setTimeout(()=>{
+
+            let botoes=document.createElement("div");
+
+            botoes.className="actions";
+
+            botoes.innerHTML=                <a class="spotify"                 target="_blank"                 href="https://open.spotify.com/track/6bAnkRCGOX7g5rT8WN5eci?si=DSJ3pHylQh61mxPhA6JEog&context=spotify%3Aplaylist%3A37i9dQZF1EIWcUulZOXV01">                 🎵 Spotify                 </a>                  <a class="youtube"                 target="_blank"                 href="https://www.youtube.com/watch?v=FydI9-rqEZI">                 ▶️ YouTube                 </a>            ;
+
+            resultado.appendChild(botoes);
+
+            let footer=document.createElement("div");
+
+            footer.className="footer";
+
+            footer.innerText=
+            "✨ Algumas coincidências são apenas o universo sendo criativo.";
+
+            resultado.appendChild(footer);
+
+        },10000);
+
+    }else{
+
+        resultado.innerHTML=   <div class="star-symbol">🌙</div>             
+          <p class="message">      Nem toda porta foi feita para ser aberta por qualquer pessoa.   </p> 
+          <p class="message">             Talvez esta não seja a sua.             </p>              
+          <button class="primary"             onclick="location.reload()">             Retornar            
+          </button>        
+          ;
+    }
+}
+
+</script>
+
+</body>
+</html>
